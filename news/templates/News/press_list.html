@@ -1,0 +1,174 @@
+{% extends 'news/base.html' %}
+{% load thumbnail %}
+{% load static %}
+{% load tags %}
+
+
+<! -- template label for introducing notifications -- >
+
+{% comment %} {% load notifications_tags %}
+{% notifications_unread as unread_count %} {% endcomment %}
+
+ {% block title %}
+       {{ page_title|default:"الأخبار" }}
+ {% endblock title %}
+ {% block modal%}
+ {% if object_list%}
+ {% for entry in object_list %}
+        {% for img in entry.News_image.all %}
+           <!-- The Modal -->
+  <div class="modal fade " id="myModal{{forloop.counter}}{{forloop.parentloop.counter}}">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content modal-dialog-scrollable">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+         
+          <button type="button" class="close" data-dismiss="modal">&times;</button> 
+          
+          <h4 class="modal-title">اصل الخبر</h4>
+          <input type="checkbox" class="zoom" >2X</input><br>
+          <input type="checkbox"  >X</input><br>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+         <!-- http://intranet.ida.gov.eg:85/media/photo/indeDx.jpg- -->
+         
+        <img id= 'display' class="img-gallery" src="{{img.image.url}}" class="mx-auto d-block" width="70%" />
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+         
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <!-- End Modal-->
+  {% endfor %}
+  {% endfor %}
+  {% endif%}
+  {% endblock %}
+  
+ {% block content%}
+ 
+        {% if object_list%}
+        
+<table class="container-fluid table table-striped table-hover" style="width:100% !important">
+  <thead>
+  <tr>
+  <th class="table-info">العنوان</th> 
+  <th class="table-info text-nowrap">تاريخ الخبر</td> 
+ <th class="table-info ">الجريدة</th>
+  <th class="table-info text-nowrap">نوع الخبر</th>
+  <th class="table-info text-nowrap">أصل الخبر</th>
+   <th class="table-info text-nowrap">فيديو</th>
+  <th class="table-info text-nowrap">رابط الخبر</th>
+  <th class="table-info text-nowrap">الملفات</th> 
+  
+  </tr>
+  </thead>
+            {% for entry in object_list %}
+            
+                {% if entry.newstype_id != 5 and entry.newstype_id != 6 %}
+  <tbody>
+  
+  <tr>
+  {% if entry.negative %}
+    <tr class="text-danger " style="background-color: #e3e3e3;" >  
+  {% endif%}
+  <td >
+  {% if entry.negative %}
+  <h5 class="text-danger">{{entry.title}}</h5>
+  {% else%}
+  <h5 class="text-info">{{entry.title}}</h5>
+  {% endif %}
+  <p>
+  {{entry.newsscript| safe}}
+  </p>
+  </td>
+   <td>{{entry.newsdate|date:"SHORT_DATE_FORMAT"}}</td>
+  <td>{% for np in entry.papertype.all %}
+  {{np.paperName}}
+  {%  endfor %}
+  </td>
+ 
+  <td class="text-nowrap">{{entry.newstype}}</td>
+   <td class="text-nowrap">
+   
+   {% for img in entry.News_image.all %}
+   {% if forloop.counter|divisibleby:2 %}
+   <a href="#" data-toggle="modal" data-target="#myModal{{forloop.counter}}{{forloop.parentloop.counter}}" data-keyboard="false" >
+   <img  src="{%thumbnail img.image 100x100%}" alt="Nobject">
+   </a>
+
+   {% else %}  
+   <br> <br><a href="#myModal{{img.image.url }}" data-toggle="modal" data-target="#myModal{{forloop.counter}}{{forloop.parentloop.counter}}" data-keyboard="false" >
+   <img src="{%thumbnail img.image 100x100%}" alt="Nobject">
+   </a>
+ 
+   {% endif %}
+   
+  {%  endfor %}
+  {% for fl in entry.news.all %}
+   
+   <a href="{{fl.filename}}" target="blank">رابط الملف</a> 
+   {% endfor %}
+  
+   </td>
+   <td>
+   {% if entry.newsvideo %}
+   <a href="../media/video/{{entry.newsvideo| safe}}" target="blank">رابط الفيديو</a> 
+   {% endif %}
+   {% if entry.newsembedvideo %}
+   
+   {{entry.newsembedvideo| Vidsize:"200"| safe }}
+   
+   {% endif %}
+   </td>
+  <td>
+ {% if entry.newsurl %}
+   <a href="{{entry.newsurl}}" target="blank">رابط الخبر</a> 
+{% endif %}
+  </td>
+  <td>
+
+  
+  {% for fl in entry.News_file.all %}
+   <p>
+   <a href="../media/{{fl.filename}}" target="blank">رابط الملف</a> 
+   </p>
+   {% endfor %}
+  
+  </td>
+  </tr>
+  </tbody>  
+
+                 {% endif %}                
+            {% endfor %}
+            </table>
+   
+        <!-- Pagination -->
+  <div class='pagination justify-content-center'>
+    {% if page_obj.has_previous %}
+      <a href='{% url "news:press-list" %}?page={{ page_obj.previous_page_number }}'>السابق </a>
+    {% endif %}
+
+    <span class='mx-4'>
+      صفحة {{ page_obj.number }} من {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+     <a  href='{% url "news:press-list" %}?page={{ page_obj.next_page_number }}' >التالى </a>
+
+    {% endif %}
+ 
+  </div>
+  <!-- END Pagination -->
+         {% endif %}
+     
+
+        {% endblock %}

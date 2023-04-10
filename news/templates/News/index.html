@@ -1,0 +1,137 @@
+{% load static %}
+{% comment %} {% load notifications_tags %} {% endcomment %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>
+  {% block title %}
+      أقوال الصحف
+ {% endblock title %}
+</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv=â€œX-UA-Compatibleâ€ content=â€œIE=edgeâ€>
+  <!-- favicons -->
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'news/images/favicons/apple-touch-icon.png' %}">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'news/images/favicons/favicon-32x32.png' %}" >
+  <link rel="icon" type="image/png" sizes="16x16" href= "{% static 'news/images/favicons/favicon-16x16.png' %}">
+  <link rel="manifest" href= "{% static 'news/images/favicons/site.webmanifest' %}">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <!-- favicons -->
+  <link href="{% static 'news/styles/bootstrap.css' %}" rel="stylesheet" type="text/css">
+   <link href="{% static 'news/styles/style.css' %}" rel="stylesheet" type="text/css">
+   <link href="{% static 'news/styles/custom-responsive-style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'news/fonts/fontawesome5.15.2/css/all.css' %}" rel="stylesheet" type="text/css">  
+    <link href="{% static 'news/styles/ihover.css' %}" rel="stylesheet" type="text/css">
+     <link href="{% static 'news/styles/style.css' %}" rel="stylesheet" type="text/css">
+   <script type="text/javascript" src="{% static 'news/script/jquery-3.2.1.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'news/script/all-plugins.js' %}"></script>
+  <script type="text/javascript" src="{% static 'news/script/plugin-active.js' %}"></script>
+  <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
+{% comment %} {% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %} {% endcomment %}
+
+</head>
+
+<body> <!-- Header starts here -->
+<header>
+
+<div class="container-fluid row">
+      <div class="col-sm-4" ><a href="{% url 'news:index' %}" class="navbar-brand logo"><img src="{% static 'News/images/logo.png' %}" alt="" id="logo" /></a></div>
+      <div class="col-sm-4" ><h1 class="h1 display-2 text-lg-center">أقوال الصحف</h1> </div>
+      <div class="col-sm-4" ></div>
+    </div>
+
+
+</nav>
+</header>
+<div class="jumbotron jumbotron-fluid" style="margin-bottom:0">
+  
+<div class="container-fluid" >
+<div class="row">
+  <div class="col-sm-6">
+     
+      <div>
+      <img class="img img-fluid" src="{% static 'News/images/Media-Coverage.jpg' %}" alt="Media-Coverage" />
+      </div>
+     
+    
+    </div>
+     <div class="row col-sm-6" style="margin-top:15%">
+      <div class="col-sm-4">
+ 
+    <!-- colored -->
+     <div class="ih-item circle colored effect3  left_to_right ">
+    <a href="{%url 'news:press-list' %}" data-toggle="tooltip" data-placement="left" title="أقوال الصحف">
+       <div class="img img-fluid" ><img src="{% static 'News/images/newspaper.svg' %}" alt="أقوال الصحف" class="imgsvg img-fluid" >
+        <span class="sr-only">أقوال الصحف</span>
+       </div>
+        <div class="info">
+          <h2>أقوال الصحف</h2>
+          <!--<p>Description goes here</p>-->
+        </div></a></div>
+    <!-- end colored -->
+ 
+  </div>
+    <div class="col-sm-4">
+ 
+    <!-- normal -->
+      <div class="ih-item circle colored effect3 top_to_bottom">
+   
+    <a href="{%url 'news:news-list' type=5 %}" data-toggle="tooltip" data-placement="right" title="توجيهات رئاسية عامة">
+       <div class="img img-fluid" ><img src="{% static 'News/images/bubbleCogs1.svg' %}" title="توجيهات رئاسية عامة" class="imgsvg img-fluid" >
+       <span class="sr-only">توجيهات رئاسية عامة</span>
+       </div>
+        <div class="info">
+          <h2>توجيهات رئاسية 
+          <br>عامة
+          </h2>
+          <!--<p>Description goes here</p>-->
+        </div></a>
+      </div>
+    <!-- end normal -->
+ 
+  </div>
+ <div class="col-sm-4">
+ 
+    <!-- colored -->
+  <div class="ih-item circle colored effect3 right_to_left">
+    <a href="{%url 'news:news-list' type=6 %}" data-toggle="tooltip" data-placement="top" title="توجيهات رئاسية خاصة">
+          <div class="img img-fluid" ><img src="{% static 'News/images/factory.svg' %}" alt="توجيهات رئاسية خاصة" class="imgsvg img-fluid" >
+           <span class="sr-only">توجيهات رئاسية خاصة</span>
+          </div>
+        <div class="info">
+          <h2>توجيهات رئاسية 
+          <br>خاصة</h2>
+          <!--<p>Description goes here</p>-->
+        </div></a></div>
+    <!-- end colored -->
+ 
+  </div>
+ 
+  </div>
+
+</div>
+</div >
+ <footer class="orangeFooter" >
+   
+        <div class="row">
+          <div class="col-12">
+            <p class="designed"> الهيئة العامة للتنمية الصناعية <script>document.write(new Date().getFullYear())</script></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>
+</body>
+</html>

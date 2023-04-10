@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+        {% block title %}
+      
+ {% endblock title %}
+        </title>
+          <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv=â€œX-UA-Compatibleâ€ content=â€œIE=edgeâ€>
+  <!-- favicons -->
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'news/images/favicons/apple-touch-icon.png' %}">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'news/images/favicons/favicon-32x32.png' %}" >
+  <link rel="icon" type="image/png" sizes="16x16" href= "{% static 'news/images/favicons/favicon-16x16.png' %}">
+  <link rel="manifest" href= "{% static 'news/images/favicons/site.webmanifest' %}">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <!-- favicons -->
+  <link href="{% static 'news/styles/bootstrap.css' %}" rel="stylesheet" type="text/css">
+   <link href="{% static 'news/styles/animate.css' %}" rel="stylesheet" type="text/css">
+   <link href="{% static 'news/styles/style.css' %}" rel="stylesheet" type="text/css">
+   <link href="{% static 'news/styles/custom-responsive-style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'news/fonts/fontawesome5.15.2/css/all.css' %}" rel="stylesheet" type="text/css">  
+    <link href="{% static 'news/styles/webslidemenu.css' %}" rel="stylesheet" type="text/css">
+
+
+   <script type="text/javascript" src="{% static 'news/script/jquery-3.2.1.min.js' %}"></script>
+   <script type="text/javascript" src="{% static 'news/script/bootstrap.js' %}"></script>
+  <script type="text/javascript" src="{% static 'news/script/all-plugins.js' %}"></script>
+  <script type="text/javascript" src="{% static 'news/script/plugin-active.js' %}"></script>
+<script type="text/javascript" language="javascript" src={% static 'news/script/webslidemenu.js'"></script>
+    </head>
+    <body>
+    <header>
+        <div class="container-fluid row">
+      <div class="col-sm-4" ><a href="{% url 'news:index' %}" class="navbar-brand "><img src="{% static 'News/images/logoEagle.png' %}" alt="" id="logo" /></a></div>
+      <div class="col-sm-4" ><h1 class="h1 display-2 text-lg-center"></h1> </div>
+      <div class="col-sm-4" ></div>
+    </div>
+    </header>
+    <div class="card" style="width:30rem; margin:0 auto; margin-top: 30px;">
+        {% block content%}
+
+
+        
+        {%endblock%}
+        </div>
+         <footer class="orangeFooter" >
+   
+        <div class="row">
+          <div class="col-12">
+            <p class="designed"> الهيئة العامة للتنمية الصناعية <script>document.write(new Date().getFullYear())</script></p>
+          </div>
+        </div>
+      </div>
+   
+  </footer>
+    </body>
+</html>

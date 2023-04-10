@@ -1,0 +1,21 @@
+{% extends 'news/base.html' %}
+ {% block title %}
+       {{ page_title|default:"أخبار الهيئة" }}
+ {% endblock title %}
+ {% block content%}
+<!--
+        {% if object_list%}
+     
+            {% for entry in object_list %}
+                  <a href='{{ entry.get_absolute_url }}'> {{entry.pk}} - {{entry.title}} </a>
+                  <br/>
+            {% endfor %}
+         {% endif %}-->
+<ul>
+<li><a href="/news/list?browse=1">توجهات رئيس الجمهورية الخاصة</a></li>
+<li><a href="/news/list?browse=5">توجهات رئيس الجمهورية العامة</a></li>
+
+</ul>
+
+        {% endblock %}
+

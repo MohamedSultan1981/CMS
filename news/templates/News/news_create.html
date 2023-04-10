@@ -1,0 +1,55 @@
+{% extends 'news/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}
+إدخال الأخبار
+{% endblock %}
+ {% block content%}
+        <form method="POST" enctype="multipart/form-data" >
+         {% csrf_token %} 
+         {{form.as_p}}
+         {{form.media}}
+         
+         {% for formset in inlines %}
+        <div id="{{ formset.prefix }}">
+        {% for subform in formset.forms %}
+            <table>
+            {{ subform.as_table }}
+            </table>
+        {% endfor %}
+        {{ formset.management_form|crispy }}
+        </div>
+    {% endfor %}
+    
+  
+         <hr/>
+        <div>
+        {% comment %} {{ files.as_p}} {% endcomment %}
+        </div>
+        <input type='submit' value ="حفظ"  class="btn btn-lg btn-info"/>
+        </form>
+
+
+<script src="{% static "dynamic_formsets/jquery.formset.js" %}" type="text/javascript"> </script>
+
+<script type="text/javascript">
+       $(function() {
+           {% for formset in inlines %}
+           $('div#{{ formset.prefix }}').formset({
+            
+               prefix: '{{ formset.prefix }}',
+               
+               formCssClass: 'dynamic-formset{{ forloop.counter }}'
+               
+           });
+           $(".delete-row").html("أحذف");
+           $(".add-row").html("أضف");
+            $(".add-row").click(function(){
+            $(".delete-row").html("أحذف");
+  });
+           {% endfor %}
+       })
+   </script>
+
+{% endblock %}

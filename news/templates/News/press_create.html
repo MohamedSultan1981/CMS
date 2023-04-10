@@ -1,0 +1,12 @@
+{% extends 'news/base.html' %}
+{% block title %}
+إدخال اقوال الصحف
+{% endblock %}
+ {% block content%}
+        <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %} 
+         {{form.as_p}}
+         {{form.media}}
+        <input type='submit' value ="حفظ"  class="btn btn-lg btn-info"/>
+        </form>
+        {% endblock %}

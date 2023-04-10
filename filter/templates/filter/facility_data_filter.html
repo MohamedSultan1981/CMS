@@ -1,0 +1,116 @@
+
+{% extends 'filter/base_filter.html' %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+{% load django_tables2%}
+{% load tags %}
+{% block content %}
+  <form method="get">
+    {{ filter.form |crispy }}
+    <button type="submit" class="btn btn-info btn-lg">Search</button>
+  </form>
+  <br/>
+  <a href="{% export_url 'xlsx'%}"> لتحميل النتائج في صورة  ملف اكسيل </a>
+  {% endblock %}
+  <br/>
+   {% block results %}
+  <div class="card bg-light text-dark">
+  <div class="card-header bg-secondary text-white"><h3>نتائج البحث</h3></div>
+  <div class="card-body">
+   <!-- {% render_table filter.qs 'django_tables2/bootstrap.html'%} -->
+
+
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+      <th>اسم المصنع </th>
+        <th>المدير المسئول</th>
+        <th style="width: 10%;">العنوان</th>
+        <th>رقم التليفون</th>
+        <th>رقم السجل</th>
+        <th >المنتجات</th>
+        <th>الكمية</th>
+        <th>الوحدة</th>
+      </tr> 
+    </thead>
+    <tbody>
+      {% for fact in object_list %}
+        <tr>
+          <td>{{ fact.NAME }}</td>
+          <td style="width: 10%;">{{ fact.CEO_NAME }}</td>
+          <td >{{ fact.DETAILED_ADDRESS }}</td>
+          <td>{{ fact.PRIMARY_MOBILE }}</td>
+         <td>
+            {% for registry in fact.my.all %}
+              {{registry.REGISTRY_NUMBER}}
+            {% empty %}
+              <em class="text-muted">No group</em>
+            {% endfor %}
+          </td>
+          <td> 
+            {% for prod in fact.Prouducts.all %}
+            <p class="borderedText">
+              {{ prod.PRODUCT_TITLE}}
+            </p>
+            {% empty %}
+              <em class="text-muted">No group</em>
+            {% endfor %}
+          </td>
+           <td>
+          
+            {% for q in fact.Productquantities.all%}
+            <p class="borderedText">
+             {{q.PRODUCT_QUANTITY}}
+             </p>
+            {% empty %}
+              <em class="text-muted">No group</em>
+            {% endfor %}
+            </td>
+         
+           <td>
+          
+            {% for q in fact.Productquantities.all%}
+            <p class="borderedText">
+             {{q.UNIT_ID}}
+             </p>
+            {% empty %}
+              <em class="text-muted">No group</em>
+            {% endfor %}
+            </td>
+
+
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5">No data</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+ 
+  
+  {% if is_paginated %}
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a href="?{% param_replace page=page_obj.previous_page_number %}" class="page-link">&laquo;</a></li>
+    {% else %}
+      <li class="disabled page-item"><span  class="page-link">&laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% elif i > page_obj.number|add:'-35' and i < page_obj.number|add:'35' %}
+        <li class="page-item"><a href="?{% param_replace page=i %}" class="page-link">{{ i }} </a></li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li  class="page-item" ><a href="?{% param_replace page=page_obj.next_page_number %}" class="page-link" >&raquo;</a></li>
+    {% else %}
+      <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+{% endblock %}
+  
+  

@@ -1,0 +1,52 @@
+{% extends 'news/base.html' %}
+ {% block title %}
+       {{ page_title|default:"الأخبار" }}
+ {% endblock title %}
+ {% block content%}
+        {% if object_list%}
+    
+            <table class="container table table-striped  table-hover"> 
+            <thead>
+              <th class="table-info">العنوان</th>
+              <th class="table-info">التاريخ</th>    
+            </thead>
+            <tbody>
+            {% for entry in object_list %}
+            <tr>
+            {% if entry.negative %}
+    <tr class="text-danger " style="background-color: #e3e3e3; border:#fff 2px solid;" >  
+    
+  {% endif%}
+             <td>
+             {% if entry.negative %}
+              <a href='{{ entry.get_absolute_url }}' class="text-danger">{{entry.title}}</a>
+              {% else%}
+                  <a href='{{ entry.get_absolute_url }}'>{{entry.title}}</a>
+             </td>
+             {% endif%}
+             <td>{{entry.newsdate}} </td>
+                  
+            </tr>
+            {% endfor %}
+      </tbody>
+      </table>
+        <!-- Pagination -->
+  <div class='pagination justify-content-center'>
+    {% if page_obj.has_previous %}
+      <a href='{% url "news:news-list" %}?browse={{request.get.browse }}&page={{ page_obj.previous_page_number }}'>السابق </a>
+    {% endif %}
+
+    <span class='mx-4'>
+      صفحة {{ page_obj.number }} من {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+     <a  href='{% url "news:news-list" %}?browse={{request.get.browse }}&page={{ page_obj.next_page_number }}' >التالى </a>
+
+    {% endif %}
+ 
+  </div>
+  <!-- END Pagination -->
+         {% endif %}
+        {% endblock %}
+

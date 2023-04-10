@@ -1,0 +1,140 @@
+{% extends 'news/base.html' %}
+{% load thumbnail %}
+{% load static %}
+{% load tags %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+{% load django_tables2%}
+ {% block title %}
+       {{ page_title|default:"الأخبار" }}
+ {% endblock title %}
+  {% block content%}
+  <div class ="col-lg-12 col-sm-12">
+ <form method="get">
+ 
+  {% for field in filter.form %}
+  {% if forloop.counter|divisibleby:2 %}
+  <div class="form-group col-md-6 ">
+    {{field|as_crispy_field}}
+  </div>
+</div>
+      
+        {% else %}
+        <div class="form-row">
+        <div class="form-group col-md-6 mb-0">
+          {{ field|as_crispy_field }} 
+        </div>
+    {%endif%}
+{% endfor %}
+  
+    {% comment %} {{ filter.form |crispy }} {% endcomment %}
+    <button type="submit" class="btn btn-info btn-lg">Search</button>
+  </form>
+  </div>
+  {% comment %} {% render_table filter.qs 'django_tables2/bootstrap.html'%} {% endcomment %}
+<table class="container-fluid table table-striped table-hover" style="width:100% !important">
+  <thead>
+  <tr>
+  <th class="table-info">العنوان</th> 
+  <th class="table-info text-nowrap">تاريخ الخبر</td> 
+ <th class="table-info ">الجريدة</th>
+  <th class="table-info text-nowrap">نوع الخبر</th>
+  <th class="table-info text-nowrap">أصل الخبر</th>
+   <th class="table-info text-nowrap">فيديو</th>
+  <th class="table-info text-nowrap">رابط الخبر</th>
+  <th class="table-info text-nowrap">الملفات</th> 
+  
+  </tr>
+  </thead>
+            {% for entry in object_list %}
+               
+  <tbody>
+  
+  <tr>
+  {% if entry.negative %}
+    <tr class="text-danger " style="background-color: #e3e3e3;" >  
+  {% endif%}
+  <td >
+  {% if entry.negative %}
+  <h5 class="text-danger">{{entry.title}}</h5>
+  {% else%}
+  <h5 class="text-info">{{entry.title}}</h5>
+  {% endif %}
+  <p>
+  {{entry.newsscript| safe}}
+  </p>
+  </td>
+   <td>{{entry.newsdate|date:"SHORT_DATE_FORMAT"}}</td>
+  <td>{% for np in entry.papertype.all %}
+  {{np.paperName}}
+  {%  endfor %}
+  </td>
+ 
+  <td class="text-nowrap">{{entry.newstype}}</td>
+   <td>
+   {% for img in entry.News_image.all %}
+   <a href="{{img.image.url }}" target="blank">
+   <img src="{%thumbnail img.image 100x100%}" alt="Nobject">
+   </a>
+   <br> <br>
+  {%  endfor %}
+  {% for fl in entry.news.all %}
+   
+   <a href="{{fl.filename}}" target="blank">رابط الملف</a> 
+   {% endfor %}
+  
+   </td>
+   <td>
+   {% if entry.newsvideo %}
+   <a href="../media/video/{{entry.newsvideo| safe}}" target="blank">رابط الفيديو</a> 
+   {% endif %}
+   {% if entry.newsembedvideo %}
+   
+   {{entry.newsembedvideo| Vidsize:"200"| safe }}
+   
+  
+   {% endif %}
+   </td>
+  <td>
+ {% if entry.newsurl %}
+   <a href="{{entry.newsurl}}" target="blank">رابط الخبر</a> 
+{% endif %}
+  </td>
+  <td>
+
+  
+  {% for fl in entry.News_file.all %}
+   <p>
+   <a href="../media/{{fl.filename}}" target="blank">رابط الملف</a> 
+   </p>
+   {% endfor %}
+  
+  </td>
+  </tr>
+  </tbody>  
+
+                               
+            {% endfor %}
+            </table>
+            {% if is_paginated %}
+            <ul class="pagination">
+              {% if page_obj.has_previous %}
+                <li class="page-item"><a href="?{% param_replace page=page_obj.previous_page_number %}" class="page-link">&laquo;</a></li>
+              {% else %}
+                <li class="disabled page-item"><span  class="page-link">&laquo;</span></li>
+              {% endif %}
+              {% for i in paginator.page_range %}
+                {% if page_obj.number == i %}
+                  <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% elif i > page_obj.number|add:'-35' and i < page_obj.number|add:'35' %}
+                  <li class="page-item"><a href="?{% param_replace page=i %}" class="page-link">{{ i }} </a></li>
+                {% endif %}
+              {% endfor %}
+              {% if page_obj.has_next %}
+                <li  class="page-item" ><a href="?{% param_replace page=page_obj.next_page_number %}" class="page-link" >&raquo;</a></li>
+              {% else %}
+                <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+              {% endif %}
+            </ul>
+          {% endif %}
+ {% endblock content%}
